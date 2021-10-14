@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}My Blog{% endblock %}
+
+{% block content %}
+<h1>Nueva publicacion</h1>
+<form action="{% url 'blog:post_add'%}" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}  
+    <input type="submit" value="Publicar">
+</form>
+
+{% include "blog/pagination.html" with page=page_obj %}
+{% endblock%}

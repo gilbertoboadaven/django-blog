@@ -1,0 +1,53 @@
+
+{% extends 'blog/base.html' %}
+{% block title %}Django Blog{% endblock %}
+
+{% block content %}
+
+<p class="date">
+    Publicado {{ post.publish }} por {{ post.author }}
+</p>
+{{ post.body }}
+
+<p class="tags">
+    Etiquetas:
+    {% for tag in post.tags.all %}
+    <a href="{% url "blog:post_list_by_tag" tag.slug %}">
+    {{ tag.name }}
+    </a>
+    {% endfor %}
+    </p>
+    
+{% with comments.count as total_comments %}
+<h2>
+    {{ total_comments }} comentario{{ total_comments|pluralize }}
+</h2>
+{% endwith %}
+{% for comment in comments %}
+<div class="comment">
+<p class="info">
+Comentario {{ forloop.counter }} por {{ comment.name }}
+{{ comment.created }}
+</p>
+{{ comment.body }}
+</div>
+{% empty %}
+<p>Sin Comentarios.</p>
+{% endfor %}
+
+{% if new_comment %}
+<h2>Tu comentario ha sido agregado.</h2>
+{% else %}
+<h2>Añadir un nuevo comentario</h2>
+<form method="post">
+    {{ comment_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Add comment"></p>
+</form>
+{% endif %}
+
+<hr>
+
+
+
+{% endblock%}
